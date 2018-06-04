@@ -16,6 +16,7 @@ Including another URLconf
 from django.conf.urls import url
 
 from post import views as post_views
+from user import views as user_views
 
 
 urlpatterns = [
@@ -25,4 +26,9 @@ urlpatterns = [
     url(r'^post/read/', post_views.read),
     url(r'^post/list/', post_views.post_list),
     url(r'^post/search/', post_views.search),
+
+    url(r'^user/register/', user_views.register),
+    url(r'^user/login/', user_views.login),
+    url(r'^user/info/', user_views.user_info),
+    url(r'^user/logout/', user_views.logout),
 ]
