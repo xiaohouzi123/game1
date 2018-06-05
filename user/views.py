@@ -1,7 +1,10 @@
+# coding: utf-8
+
 from django.shortcuts import render, redirect
 from django.contrib.auth.hashers import make_password, check_password
 
 from user.models import User
+from user.helper import login_required
 from user.forms import RegisterForm
 
 
@@ -42,12 +45,14 @@ def login(request):
         return render(request, 'login.html')
 
 
+@login_required
 def user_info(request):
     uid = request.session['uid']
     user = User.objects.get(id=uid)
     return render(request, 'user_info.html', {'user': user})
 
 
+@login_required
 def logout(request):
     request.session.flush()
     return redirect('/user/login/')
