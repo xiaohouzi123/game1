@@ -19,6 +19,7 @@ from django.conf import settings
 
 from post import views as post_views
 from user import views as user_views
+from sns import views as sns_view
 
 
 urlpatterns = [
@@ -33,6 +34,8 @@ urlpatterns = [
     url(r'^user/login/', user_views.login),
     url(r'^user/info/', user_views.user_info),
     url(r'^user/logout/', user_views.logout),
+
+    url(r'^weibo/callback/', sns_view.weibo_callback)
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

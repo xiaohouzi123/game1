@@ -123,3 +123,33 @@ STATICFILES_DIRS = [
 
 MEDIA_URL = '/medias/'
 MEDIA_ROOT = 'medias'
+
+# Wei Bo
+WEIBO_APP_KEY = '1310374555'
+WEIBO_APP_SECRET = 'e5cf3ddc50d77ba6f038013003c29550'
+WEIBO_CALLBACK_URL = 'http://seamile.org/weibo/callback/'
+
+# 第一步的接口
+AUTHORIZE_API = 'https://api.weibo.com/oauth2/authorize'
+AUTHORIZE_PARAMS = {
+    'client_id': WEIBO_APP_KEY,
+    'redirect_uri': WEIBO_CALLBACK_URL,
+    'response_type': 'code',
+}
+
+# 第二部接口
+ACCESS_TOKEN_API = 'https://api.weibo.com/oauth2/access_token'
+ACCESS_TOKEN_PARAMS = {
+    'client_id': WEIBO_APP_KEY,
+    'client_secret': WEIBO_APP_SECRET,
+    'grant_type': 'authorization_code',
+    'redirect_uri': WEIBO_CALLBACK_URL,
+    'code': '',  # 第一步的结果
+}
+
+# 获取用户信息
+WEIBO_INFO_API = 'https://api.weibo.com/2/users/show.json'
+WEIBO_INFO_PARAMS = {
+    'access_token': '',
+    'uid': ''
+}

@@ -1,7 +1,10 @@
 # coding: utf-8
 
+from urllib.parse import urlencode
+
 from django.shortcuts import render, redirect
 from django.contrib.auth.hashers import make_password, check_password
+from django.conf import settings
 
 from user.models import User
 from user.helper import login_required
@@ -27,22 +30,27 @@ def register(request):
 
 
 def login(request):
+    querystring = urlencode(settings.AUTHORIZE_PARAMS)
+    weibo_login_api = '%s?%s' % (settings.AUTHORIZE_API, querystring)
+
     if request.method == 'POST':
         nickname = request.POST.get('nickname')
         password = request.POST.get('password')
         try:
             user = User.objects.get(nickname=nickname)
         except User.DoesNotExist:
-            return render(request, 'login.html', {'error': '用户名错误'})
+            return render(request, 'login.html',
+                          {'error': '用户名错误', 'weibo_login_api': weibo_login_api})
         if check_password(password, user.password):
             # 记录登录状态
             request.session['uid'] = user.id
             request.session['nickname'] = user.nickname
             return redirect('/user/info/')
         else:
-            return render(request, 'login.html', {'error': '密码错误'})
+            return render(request, 'login.html',
+                          {'error': '密码错误', 'weibo_login_api': weibo_login_api})
     else:
-        return render(request, 'login.html')
+        return render(request, 'login.html', {'weibo_login_api': weibo_login_api})
 
 
 @login_required
