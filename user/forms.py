@@ -10,7 +10,7 @@ class RegisterForm(forms.ModelForm):
 
     password2 = forms.CharField(max_length=128)
 
-    def clean_password(self):
+    def clean_password2(self):
         cleaned_data = super().clean()
 
         if len(cleaned_data['password']) < 8:

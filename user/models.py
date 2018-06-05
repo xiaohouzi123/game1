@@ -8,7 +8,7 @@ class User(models.Model):
         ('U', '保密'),
     )
 
-    nickname = models.CharField(max_length=32)
+    nickname = models.CharField(max_length=32, unique=True)
     password = models.CharField(max_length=128)
     icon = models.ImageField()
     sex = models.CharField(max_length=8, choices=SEX)
