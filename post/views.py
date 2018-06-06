@@ -3,6 +3,7 @@ from math import ceil
 from django.shortcuts import render, redirect
 
 from post.models import Post
+from post.helper import page_cache
 
 
 def create(request):
@@ -30,6 +31,7 @@ def edit(request):
         return render(request, 'edit.html', {'post': post})
 
 
+@page_cache(3)
 def read(request):
     post_id = int(request.GET.get('post_id'))
     try:
@@ -39,6 +41,7 @@ def read(request):
         return redirect('/')
 
 
+@page_cache(3)
 def post_list(request):
     page = int(request.GET.get('page', 1))  # 当前页码，默认为 1
 
