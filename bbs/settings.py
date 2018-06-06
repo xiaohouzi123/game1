@@ -124,6 +124,28 @@ STATICFILES_DIRS = [
 MEDIA_URL = '/medias/'
 MEDIA_ROOT = 'medias'
 
+# Cache 配置
+
+# 默认配置
+# CACHES = {
+#     'default': {
+#         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache'
+#     }
+# }
+
+# 使用 Redis 做缓存
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",  # 存储引擎
+        "LOCATION": "redis://127.0.0.1:6379/1",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            "PICKLE_VERSION": -1,
+        }
+    }
+}
+
+# ==============================================================================
 # Wei Bo
 WEIBO_APP_KEY = '1310374555'
 WEIBO_APP_SECRET = 'e5cf3ddc50d77ba6f038013003c29550'
