@@ -4,6 +4,8 @@ from django.shortcuts import render, redirect
 
 from post.models import Post
 from post.helper import page_cache
+from post.helper import read_count
+from post.helper import get_top_n
 
 
 def create(request):
@@ -31,7 +33,8 @@ def edit(request):
         return render(request, 'edit.html', {'post': post})
 
 
-@page_cache(3)
+@read_count
+@page_cache(300)
 def read(request):
     post_id = int(request.GET.get('post_id'))
     try:
@@ -61,3 +64,13 @@ def search(request):
     keyword = request.POST.get('keyword')
     posts = Post.objects.filter(content__contains=keyword)
     return render(request, 'search.html', {'posts': posts})
+
+
+def top10(request):
+    # rank_data = [
+    #     [Post(1), 10],
+    #     [Post(3), 9],
+    #     [Post(2), 5],
+    # ]
+    rank_data = get_top_n(10)
+    return render(request, 'top10.html', {'rank_data': rank_data})
