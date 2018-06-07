@@ -12,6 +12,7 @@ from user.helper import login_required
 
 
 @login_required
+@check_perm('user')
 def create(request):
     if request.method == 'POST':
         title = request.POST.get('title')
