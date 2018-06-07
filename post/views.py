@@ -4,6 +4,7 @@ from django.shortcuts import render, redirect
 
 from post.models import Post
 from post.models import Comment
+from post.models import Tag
 from post.helper import page_cache
 from post.helper import read_count
 from post.helper import get_top_n
@@ -31,11 +32,18 @@ def edit(request):
         post.title = request.POST.get('title')
         post.content = request.POST.get('content')
         post.save()
+
+        tags = request.POST.get('tags', '')
+        tag_names = [w.strip().title()
+                     for w in tags.replace('，', ',').split(',')
+                     if w.strip()]
+        post.update_tags(tag_names)
         return redirect('/post/read/?post_id=%d' % post.id)
     else:
         post_id = int(request.GET.get('post_id'))
         post = Post.objects.get(id=post_id)
-        return render(request, 'edit.html', {'post': post})
+        tag_str = ', '.join([t.name for t in post.tags()])
+        return render(request, 'edit.html', {'post': post, 'tags': tag_str})
 
 
 @read_count
@@ -88,3 +96,9 @@ def comment(request):
     content = request.POST.get('content')
     Comment.objects.create(uid=uid, post_id=post_id, content=content)
     return redirect('/post/read/?post_id=%s' % post_id)
+
+
+def tag_filter(request):
+    tag_id = int(request.GET.get('tag_id'))
+    tag = Tag.objects.get(id=tag_id)
+    return render(request, 'tag_filter.html', {'posts': tag.posts()})
