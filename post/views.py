@@ -6,18 +6,22 @@ from post.models import Post
 from post.helper import page_cache
 from post.helper import read_count
 from post.helper import get_top_n
+from user.helper import login_required
 
 
+@login_required
 def create(request):
     if request.method == 'POST':
         title = request.POST.get('title')
         content = request.POST.get('content')
-        post = Post.objects.create(title=title, content=content)
+        uid = request.session['uid']
+        post = Post.objects.create(uid=uid, title=title, content=content)
         return redirect('/post/read/?post_id=%d' % post.id)
     else:
         return render(request, 'create.html')
 
 
+@login_required
 def edit(request):
     if request.method == 'POST':
         post_id = int(request.POST.get('post_id'))
@@ -34,7 +38,7 @@ def edit(request):
 
 
 @read_count
-@page_cache(300)
+@page_cache(3)
 def read(request):
     post_id = int(request.GET.get('post_id'))
     try:
@@ -56,7 +60,7 @@ def post_list(request):
     # 取出本页需要现实的文章
     start = (page - 1) * per_page
     end = start + per_page
-    posts = Post.objects.all()[start:end]
+    posts = Post.objects.all().order_by('-created')[start:end]
     return render(request, 'post_list.html', {'posts': posts, 'pages': range(pages)})
 
 
