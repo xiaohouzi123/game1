@@ -9,6 +9,7 @@ from post.helper import page_cache
 from post.helper import read_count
 from post.helper import get_top_n
 from user.helper import login_required
+from user.helper import check_perm
 
 
 @login_required
@@ -56,6 +57,14 @@ def read(request):
         return render(request, 'read.html', {'post': post})
     except Post.DoesNotExist:
         return redirect('/')
+
+
+@login_required
+@check_perm('manager')
+def del_post(request):
+    post_id = request.GET.get('post_id')
+    Post.objects.get(id=post_id).delete()
+    return redirect('/')
 
 
 @page_cache(3)

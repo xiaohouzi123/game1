@@ -1,12 +1,10 @@
 # coding: utf-8
 
 from django.core.cache import cache
-from django.shortcuts import render
 
 from common import keys
 from common import rds
 from post.models import Post
-from user.models import User
 
 
 def page_cache(timeout):
@@ -74,19 +72,3 @@ def get_top_n(num):
         item[0] = post
 
     return rank_data
-
-
-def check_perm(need_perm):
-    def wrap1(view_func):
-        def wrap2(request):
-            # 获取当前用户
-            uid = request.session['uid']
-            user = User.objects.get(id=uid)
-
-            # 检查权限
-            if user.has_perm(need_perm):
-                return view_func(request)
-            else:
-                return render(request, 'block.html')
-        return wrap2
-    return wrap1

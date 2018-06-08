@@ -9,6 +9,7 @@
     {% if request.session.uid == post.uid %}
     <a href="/post/edit/?post_id={{post.id}}">修改</a>
     {% endif %}
+    <a href="/post/delete/?post_id={{post.id}}">删除</a>
 </div>
 <hr>
 <p>

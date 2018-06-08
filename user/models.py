@@ -24,7 +24,7 @@ class User(models.Model):
     def has_perm(self, perm_name):
         '''检查是否具有某种权限'''
         need_perm = Permission.objects.get(name=perm_name)
-        return user.perm.level >= need_perm.level
+        return self.perm.level >= need_perm.level
 
 
 class Permission(models.Model):
