@@ -1,5 +1,6 @@
 # coding: utf-8
 
+import logging
 from urllib.parse import urlencode
 
 from django.shortcuts import render, redirect
@@ -10,6 +11,7 @@ from user.models import User
 from user.helper import login_required
 from user.forms import RegisterForm
 
+info_log = logging.getLogger('inf')
 
 def register(request):
     if request.method == 'POST':
@@ -45,6 +47,7 @@ def login(request):
             # 记录登录状态
             request.session['uid'] = user.id
             request.session['nickname'] = user.nickname
+            info_log.info('login %s %s' % (user.id, user.nickname))
             return redirect('/user/info/')
         else:
             return render(request, 'login.html',

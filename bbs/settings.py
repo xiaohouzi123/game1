@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'ip3#-n9mw72woa(ex*73e0b1tmb@1e*o-z=xqw%k@ac)k%ka1^'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -166,6 +166,61 @@ REDIS = {
     'host': 'localhost',
     'port': 6379,
     'db': 1,
+}
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'simple': {
+            'format': '%(asctime)s %(module)s.%(funcName)s: %(message)s',
+            'datefmt': '%Y-%m-%d %H:%M:%S',
+        },
+        'verbose': {
+            'format': '%(asctime)s %(levelname)s [%(process)d-%(threadName)s] '
+                      '%(module)s.%(funcName)s line %(lineno)d: %(message)s',
+            'datefmt': '%Y-%m-%d %H:%M:%S',
+        }
+    },
+
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+        'inf': {
+            'class': 'logging.handlers.TimedRotatingFileHandler',
+            'filename': 'info.log',
+            'when': 'W0',  # 每周一切割日志
+            'backupCount': 5,
+            'formatter': 'simple',
+            'level': 'INFO',
+        },
+        'err': {
+            'class': 'logging.handlers.TimedRotatingFileHandler',
+            'filename': 'error.log',
+            'when': 'D',  # 每天切割日志
+            'backupCount': 30,
+            'formatter': 'verbose',
+            'level': 'WARNING',
+        }
+    },
+
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+        },
+        'inf': {
+            'handlers': ['inf'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'err': {
+            'handlers': ['err'],
+            'level': 'DEBUG',
+            'propagate': True,
+        }
+    }
 }
 
 # ==============================================================================
