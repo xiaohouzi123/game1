@@ -34,7 +34,6 @@ def read_count(read_view):
         if response.status_code < 300:
             post_id = request.GET.get('post_id')
             rds.zincrby(keys.READ_RANK_KEY, post_id)
-
         return response
     return wrap
 

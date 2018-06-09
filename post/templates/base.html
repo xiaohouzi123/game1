@@ -30,7 +30,7 @@
             </div>
 
             <ul class="nav navbar-nav navbar-right">
-                {% if request.session.uid %}
+                {% if "uid" in request.session %}
                     <li><a href="/post/create/">发表新帖</a></li>
                     <li><a>Hello, {{request.session.nickname}}</a></li>
                     <li><a href="/user/logout/">退出</a></li>
